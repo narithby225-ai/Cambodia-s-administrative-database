@@ -57,8 +57,8 @@ python gui_super_cool.py
 ## 🎯 Login Credentials
 
 **Test with:**
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 
 **Or:**
 - Username: `kep`

@@ -7,7 +7,9 @@ db = SQLAlchemy()
 class Person(db.Model):
     __tablename__ = 'people'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, index=True)
+    name = db.Column(db.String(100), nullable=True, index=True)  # Keep for backward compatibility
+    first_name = db.Column(db.String(50), nullable=True, index=True)
+    last_name = db.Column(db.String(50), nullable=True, index=True)
     gender = db.Column(db.String(10), nullable=False, index=True)
     age = db.Column(db.Integer, nullable=False, index=True)
     province = db.Column(db.String(100), nullable=False, index=True)
@@ -21,6 +23,9 @@ class Person(db.Model):
         db.Index('idx_province_district', 'province', 'district'),
         db.Index('idx_gender_age', 'gender', 'age'),
         db.Index('idx_name_province', 'name', 'province'),
+        db.Index('idx_first_name', 'first_name'),
+        db.Index('idx_last_name', 'last_name'),
+        db.Index('idx_first_last_name', 'first_name', 'last_name'),
     )
 
 class User(UserMixin, db.Model):

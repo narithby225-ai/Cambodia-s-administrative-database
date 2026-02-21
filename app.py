@@ -70,7 +70,14 @@ def search():
         except ValueError:
             pass
     if name:
-        query = query.filter(Person.name.ilike(f'%{name}%'))
+        # Search in both first_name, last_name, and full name
+        query = query.filter(
+            or_(
+                Person.first_name.ilike(f'%{name}%'),
+                Person.last_name.ilike(f'%{name}%'),
+                Person.name.ilike(f'%{name}%')
+            )
+        )
     if gender:
         query = query.filter(Person.gender == gender)
     if age_str:
@@ -214,6 +221,46 @@ def history():
     # The relationship is already set to lazy='joined' in the model
     pagination = query.paginate(page=page, per_page=50, error_out=False)
     return render_template('history.html', history=pagination.items, pagination=pagination)
+
+@app.route('/api/locations')
+@login_required
+def get_locations():
+    """API endpoint to get location data for cascading dropdowns"""
+    import json
+    try:
+        with open('cambodia_locations_real.json', 'r', encoding='utf-8') as f:
+            locations = json.load(f)
+        return jsonify(locations)
+    except FileNotFoundError:
+        return jsonify({})
+
+@app.route('/api/provinces')
+@login_required
+def get_provinces():
+    """Get list of provinces from database"""
+    provinces = db.session.query(Person.province).distinct().order_by(Person.province).all()
+    return jsonify([p[0] for p in provinces])
+
+@app.route('/api/districts/<province>')
+@login_required
+def get_districts(province):
+    """Get districts for a specific province"""
+    districts = db.session.query(Person.district).filter_by(province=province).distinct().order_by(Person.district).all()
+    return jsonify([d[0] for d in districts])
+
+@app.route('/api/communes/<province>/<district>')
+@login_required
+def get_communes(province, district):
+    """Get communes for a specific province and district"""
+    communes = db.session.query(Person.commune).filter_by(province=province, district=district).distinct().order_by(Person.commune).all()
+    return jsonify([c[0] for c in communes])
+
+@app.route('/api/villages/<province>/<district>/<commune>')
+@login_required
+def get_villages(province, district, commune):
+    """Get villages for a specific province, district, and commune"""
+    villages = db.session.query(Person.village).filter_by(province=province, district=district, commune=commune).distinct().order_by(Person.village).all()
+    return jsonify([v[0] for v in villages])
 
 if __name__ == '__main__':
     app.run(debug=True)

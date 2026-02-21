@@ -7,8 +7,8 @@ The system has **role-based access control** where managers can ONLY see and con
 ## Roles Explained
 
 ### 1. Super Admin
-- **Username**: `superadmin`
-- **Password**: `super123`
+- **Username**: `admin`
+- **Password**: `admin123`
 - **Access**: ALL 25 provinces (full database)
 - **Permissions**:
   - ✅ View all people across all provinces
@@ -126,7 +126,7 @@ Hidden: 9,960,000 people in other provinces
 
 ### Scenario 3: Super Admin Searches
 ```
-User: superadmin
+User: admin
 Province: (can search any)
 Search: name="Sok"
 

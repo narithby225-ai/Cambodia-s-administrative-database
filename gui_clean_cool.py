@@ -240,7 +240,7 @@ class CoolLoginWindow(QDialog):
         layout.addWidget(self.login_btn, alignment=Qt.AlignmentFlag.AlignCenter)
         
         # Info
-        info = QLabel("💡 Default: superadmin / super123")
+        info = QLabel("💡 Default: admin / super123")
         info.setAlignment(Qt.AlignmentFlag.AlignCenter)
         info.setStyleSheet("""
             color: rgba(255, 255, 255, 0.6);

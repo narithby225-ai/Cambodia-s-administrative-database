@@ -152,7 +152,7 @@ python gui_clean_cool.py
 - App stays open ✅
 
 **3. Wrong Password**
-- Username: `superadmin`
+- Username: `admin`
 - Password: `wrong`
 - Click LOGIN
 - See: "❌ Login Failed"
@@ -160,8 +160,8 @@ python gui_clean_cool.py
 - App stays open ✅
 
 **4. Correct Login**
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 - Click LOGIN
 - See: "✅ Success!"
 - Fades out ✅
@@ -225,6 +225,6 @@ QPushButton {
 python gui_clean_cool.py
 ```
 
-**Login**: `superadmin` / `super123`
+**Login**: `admin` / `super123`
 
 Everything works perfectly now! 🎉

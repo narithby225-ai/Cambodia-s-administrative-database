@@ -107,7 +107,7 @@ def login(self):
    - ✅ Should stay open
 
 3. **Test wrong password:**
-   - Username: `superadmin`
+   - Username: `admin`
    - Password: `wrong`
    - Click LOGIN
    - See alert
@@ -117,8 +117,8 @@ def login(self):
    - ✅ Can type again
 
 4. **Test correct login:**
-   - Username: `superadmin`
-   - Password: `super123`
+   - Username: `admin`
+   - Password: `admin123`
    - Click LOGIN
    - ✅ Should close and show success
 

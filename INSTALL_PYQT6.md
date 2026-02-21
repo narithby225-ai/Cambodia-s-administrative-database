@@ -37,8 +37,8 @@ Or just double-click: **run_pyqt6.bat**
 ## 🔑 Login
 
 **Super Admin:**
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 
 **Province Manager (example):**
 - Username: `battambang`

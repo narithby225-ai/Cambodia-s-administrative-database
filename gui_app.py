@@ -13,7 +13,7 @@ class PeopleDatabaseApp:
         self.root = root
         self.root.title("People Database Management System")
         self.root.geometry("1200x700")
-        self.root.configure(bg='#f0f0f0')
+        self.root.configure(bg='#1a1a2e')
         
         self.current_user = None
         self.db_path = 'instance/people.db'
@@ -22,36 +22,36 @@ class PeopleDatabaseApp:
         self.show_login()
     
     def show_login(self):
-        """Display login screen"""
-        # Clear window
+        """ទំព័រ Login បែប Premium Card"""
         for widget in self.root.winfo_children():
             widget.destroy()
         
-        # Center frame
-        login_frame = tk.Frame(self.root, bg='white', padx=40, pady=40)
+        self.root.configure(bg=self.colors['primary'])
+        
+        # Login Card Container
+        login_frame = tk.Frame(self.root, bg='white', padx=40, pady=40, 
+                               highlightbackground=self.colors['accent'], highlightthickness=2)
         login_frame.place(relx=0.5, rely=0.5, anchor='center')
         
-        # Title
-        title = tk.Label(login_frame, text="🔐 Login", font=('Arial', 24, 'bold'), bg='white')
-        title.grid(row=0, column=0, columnspan=2, pady=20)
+        tk.Label(login_frame, text="🔐 Login System", font=('Arial', 22, 'bold'), 
+                 bg='white', fg=self.colors['primary']).grid(row=0, column=0, columnspan=2, pady=(0, 20))
         
-        # Username
-        tk.Label(login_frame, text="Username:", font=('Arial', 12), bg='white').grid(row=1, column=0, sticky='e', padx=10, pady=10)
-        self.username_entry = tk.Entry(login_frame, font=('Arial', 12), width=25)
-        self.username_entry.grid(row=1, column=1, pady=10)
+        # Entry Styling
+        tk.Label(login_frame, text="Username:", font=('Arial', 11), bg='white').grid(row=1, column=0, sticky='w')
+        self.username_entry = tk.Entry(login_frame, font=('Arial', 12), width=28, bg='#f0f0f0', relief='flat')
+        self.username_entry.grid(row=2, column=0, columnspan=2, pady=(5, 15))
         
-        # Password
-        tk.Label(login_frame, text="Password:", font=('Arial', 12), bg='white').grid(row=2, column=0, sticky='e', padx=10, pady=10)
-        self.password_entry = tk.Entry(login_frame, font=('Arial', 12), width=25, show='*')
-        self.password_entry.grid(row=2, column=1, pady=10)
+        tk.Label(login_frame, text="Password:", font=('Arial', 11), bg='white').grid(row=3, column=0, sticky='w')
+        self.password_entry = tk.Entry(login_frame, show='*', font=('Arial', 12), width=28, bg='#f0f0f0', relief='flat')
+        self.password_entry.grid(row=4, column=0, columnspan=2, pady=(5, 20))
         
-        # Login button
-        login_btn = tk.Button(login_frame, text="Login", font=('Arial', 12, 'bold'), 
-                             bg='#4CAF50', fg='white', padx=30, pady=10,
-                             command=self.login)
-        login_btn.grid(row=3, column=0, columnspan=2, pady=20)
+        # Premium Gold Button
+        login_btn = tk.Button(login_frame, text="Login to System", font=('Arial', 12, 'bold'), 
+                               bg=self.colors['accent'], fg='white', cursor='hand2',
+                               activebackground=self.colors['primary'], activeforeground='white',
+                               padx=40, pady=10, relief='flat', command=self.login)
+        login_btn.grid(row=5, column=0, columnspan=2)
         
-        # Bind Enter key
         self.password_entry.bind('<Return>', lambda e: self.login())
         self.username_entry.focus()
     

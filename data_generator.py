@@ -1,9 +1,7 @@
 import random
 import json
-from faker import Faker
 from models import db, Person
-
-fake = Faker()
+from khmer_names import get_random_khmer_name
 
 def load_location_data():
     """Load real Cambodia location data from Excel extraction"""
@@ -16,7 +14,7 @@ def load_location_data():
         return None
 
 def generate_people(count=10000000, batch_size=10000):
-    """Generate and insert people with real location data from Cambodia Excel"""
+    """Generate and insert people with real Khmer names and Cambodia locations"""
     print(f"Loading real Cambodia location data...")
     locations = load_location_data()
     
@@ -42,15 +40,25 @@ def generate_people(count=10000000, batch_size=10000):
         return
     
     print(f"Found {len(location_pool)} real villages across {len(locations)} provinces")
-    print(f"Generating {count:,} people with real Cambodia locations...")
+    print(f"Generating {count:,} people with authentic Khmer names and real Cambodia locations...")
+    
+    from khmer_names import get_khmer_name_parts
     
     for i in range(0, count, batch_size):
         batch = []
         for _ in range(min(batch_size, count - i)):
             location = random.choice(location_pool)
+            gender = random.choice(['male', 'female'])
+            
+            # Generate authentic Khmer name parts based on gender
+            first_name, last_name = get_khmer_name_parts(gender)
+            full_name = f"{first_name} {last_name}"
+            
             person = Person(
-                name=fake.name(),
-                gender=random.choice(['male', 'female']),
+                name=full_name,
+                first_name=first_name,
+                last_name=last_name,
+                gender=gender,
                 age=random.randint(15, 60),
                 province=location['province'],
                 district=location['district'],
@@ -63,6 +71,7 @@ def generate_people(count=10000000, batch_size=10000):
         db.session.commit()
         
         if (i + batch_size) % 100000 == 0:
-            print(f"Inserted {i + batch_size:,} people...")
+            print(f"Inserted {i + batch_size:,} people with Khmer names...")
     
-    print(f"✅ Successfully generated {count:,} people with real Cambodia locations!")
+    print(f"✅ Successfully generated {count:,} people with authentic Khmer names and real Cambodia locations!")
+

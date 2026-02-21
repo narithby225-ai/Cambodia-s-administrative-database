@@ -47,7 +47,7 @@ if all_good:
     print("  python gui_clean_cool.py")
     print()
     print("Try wrong password:")
-    print("  Username: superadmin")
+    print("  Username: admin")
     print("  Password: wrong")
     print("  → Should stay open and let you retry!")
 else:

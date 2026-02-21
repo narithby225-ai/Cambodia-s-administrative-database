@@ -3,15 +3,17 @@
 {% block content %}
 <div class="card">
     <h2><i class="fas fa-user-cog"></i> User Management</h2>
+    <p style="color: rgba(248, 250, 252, 0.7); margin-bottom: 2rem;">Create and manage system users with role-based access</p>
+    
     <form method="POST" action="{{ url_for('create_user') }}" class="search-form">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
+        <input type="text" name="username" placeholder="👤 Username" required>
+        <input type="password" name="password" placeholder="🔒 Password" required>
         <select name="role" id="roleSelect" onchange="toggleProvinceField()">
-            <option value="user">User</option>
-            <option value="manager">Province Manager</option>
+            <option value="user">👨‍💼 User</option>
+            <option value="manager">👔 Province Manager</option>
         </select>
         <select name="province" id="provinceSelect" style="display:none;">
-            <option value="">Select Province</option>
+            <option value="">📍 Select Province</option>
             {% for province in provinces %}
             <option value="{{ province }}">{{ province }}</option>
             {% endfor %}
@@ -24,6 +26,8 @@
 
 <div class="card">
     <h2><i class="fas fa-users"></i> All Users</h2>
+    <p style="color: rgba(248, 250, 252, 0.7); margin-bottom: 1.5rem;">Total: {{ users|length }} users</p>
+    
     <div class="table-wrapper">
         <table>
             <thead>
@@ -39,11 +43,11 @@
             <tbody>
                 {% for user in users %}
                 <tr>
-                    <td><strong>#{{ user.id }}</strong></td>
-                    <td>{{ user.username }}</td>
+                    <td><strong style="color: var(--premium-gold);">#{{ user.id }}</strong></td>
+                    <td style="font-weight: 600;">{{ user.username }}</td>
                     <td>
                         <span class="badge badge-{{ user.role }}">
-                            {% if user.role == 'super_admin' %}
+                            {% if user.role == 'super_admin' or user.role == 'admin' %}
                             <i class="fas fa-crown"></i> Super Admin
                             {% elif user.role == 'manager' %}
                             <i class="fas fa-user-tie"></i> Manager
@@ -53,16 +57,18 @@
                         </span>
                     </td>
                     <td>{{ user.province or '-' }}</td>
-                    <td>{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td style="opacity: 0.8;">{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
                     <td>
                         {% if user.id != current_user.id %}
                         <a href="{{ url_for('delete_user', user_id=user.id) }}" class="btn btn-danger"
-                            onclick="return confirm('Delete this user?')"
-                            style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                            onclick="return confirm('Are you sure you want to delete this user?')"
+                            style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">
                             <i class="fas fa-trash"></i> Delete
                         </a>
                         {% else %}
-                        <span style="color: #999;">Current User</span>
+                        <span style="color: var(--premium-gold); font-weight: 600;">
+                            <i class="fas fa-user-check"></i> You
+                        </span>
                         {% endif %}
                     </td>
                 </tr>
@@ -83,7 +89,11 @@
         } else {
             provinceSelect.style.display = 'none';
             provinceSelect.required = false;
+            provinceSelect.value = '';
         }
     }
+    
+    // Initialize on page load
+    toggleProvinceField();
 </script>
 {% endblock %}

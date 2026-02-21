@@ -2,8 +2,11 @@
 
 {% block content %}
 <div class="card">
-    <h2><i class="fas fa-history"></i> Edit History</h2>
-    <p style="color: #666; margin-bottom: 1.5rem;">Track all user actions and system changes</p>
+    <h2><i class="fas fa-history"></i> Activity History</h2>
+    <p style="color: rgba(248, 250, 252, 0.7); margin-bottom: 1.5rem;">
+        <i class="fas fa-shield-alt" style="color: var(--premium-gold);"></i> 
+        Track all user actions and system changes for security and audit purposes
+    </p>
 
     <div class="table-wrapper">
         <table>
@@ -19,18 +22,32 @@
             <tbody>
                 {% for item in history %}
                 <tr>
-                    <td><strong>#{{ item.id }}</strong></td>
-                    <td>
-                        <i class="fas fa-user"></i> {{ item.user.username }}
+                    <td><strong style="color: var(--premium-gold);">#{{ item.id }}</strong></td>
+                    <td style="font-weight: 600;">
+                        <i class="fas fa-user-circle" style="color: var(--premium-purple);"></i> {{ item.user.username }}
                     </td>
                     <td>
-                        <span class="badge" style="background: #e3f2fd; color: #1976d2;">
+                        <span class="badge" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(99, 102, 241, 0.3)); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.5);">
+                            {% if item.action == 'login' %}
+                            <i class="fas fa-sign-in-alt"></i>
+                            {% elif item.action == 'logout' %}
+                            <i class="fas fa-sign-out-alt"></i>
+                            {% elif item.action == 'search' %}
+                            <i class="fas fa-search"></i>
+                            {% elif item.action == 'create_user' %}
+                            <i class="fas fa-user-plus"></i>
+                            {% elif item.action == 'delete_user' %}
+                            <i class="fas fa-user-minus"></i>
+                            {% else %}
+                            <i class="fas fa-cog"></i>
+                            {% endif %}
                             {{ item.action }}
                         </span>
                     </td>
-                    <td>{{ item.details or '-' }}</td>
-                    <td>
-                        <i class="fas fa-clock"></i> {{ item.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                    <td style="opacity: 0.9;">{{ item.details or '-' }}</td>
+                    <td style="opacity: 0.8;">
+                        <i class="fas fa-clock" style="color: var(--premium-gold);"></i> 
+                        {{ item.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
                     </td>
                 </tr>
                 {% endfor %}

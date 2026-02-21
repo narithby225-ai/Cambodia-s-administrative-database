@@ -1,0 +1,103 @@
+╔══════════════════════════════════════════════════════════════╗
+║  UPDATE ALL NAMES TO AUTHENTIC KHMER (CAMBODIAN) NAMES      ║
+╚══════════════════════════════════════════════════════════════╝
+
+WHAT THIS DOES:
+- Replaces all 10 million Western names with real Khmer names
+- Uses authentic Cambodian first names and surnames
+- Gender-appropriate names (male/female)
+- Examples: "Sokha Chan", "Sreymom Sok", "Virak Heng"
+
+═══════════════════════════════════════════════════════════════
+
+OPTION 1: UPDATE EXISTING DATABASE (FAST METHOD)
+═══════════════════════════════════════════════════════════════
+
+Run this command to update all existing names:
+
+    py fast_update_khmer_names.py
+
+Features:
+✓ Updates all 10 million records
+✓ Processes in batches (50,000 at a time)
+✓ Shows progress percentage
+✓ Takes 10-30 minutes
+✓ Safe and reversible
+
+═══════════════════════════════════════════════════════════════
+
+OPTION 2: GENERATE NEW DATA WITH KHMER NAMES
+═══════════════════════════════════════════════════════════════
+
+If you want to regenerate all data from scratch:
+
+1. Delete old database:
+    del instance\people.db
+
+2. Initialize new database:
+    py init_db.py
+
+3. Generate with Khmer names:
+    py -c "from app import app; from data_generator import generate_people; app.app_context().__enter__(); generate_people(100000)"
+
+Note: Change 100000 to 10000000 for full 10 million records
+
+═══════════════════════════════════════════════════════════════
+
+VERIFY NAMES AFTER UPDATE
+═══════════════════════════════════════════════════════════════
+
+Test the names:
+    py test_khmer_names.py
+
+Check database:
+    py -c "from app import app; from models import Person; app.app_context().__enter__(); [print(p.name, p.gender) for p in Person.query.limit(10)]"
+
+═══════════════════════════════════════════════════════════════
+
+SAMPLE KHMER NAMES
+═══════════════════════════════════════════════════════════════
+
+Male Names:
+  • Sokha Chan
+  • Virak Heng
+  • Piseth Kim
+  • Samnang Meng
+  • Dara Sok
+  • Rith Lay
+  • Vanna Pech
+  • Kosal Ros
+
+Female Names:
+  • Sreymom Sok
+  • Channary Meng
+  • Sophea Lay
+  • Bopha Chan
+  • Kunthea Heng
+  • Sreypov Kim
+  • Channy Pech
+  • Pisey Ros
+
+═══════════════════════════════════════════════════════════════
+
+IMPORTANT NOTES
+═══════════════════════════════════════════════════════════════
+
+1. Backup your database before updating (optional)
+2. The update process is safe and can be run multiple times
+3. All names are authentic Cambodian names
+4. Names are gender-appropriate
+5. The web interface will automatically show new names
+
+═══════════════════════════════════════════════════════════════
+
+NEED HELP?
+═══════════════════════════════════════════════════════════════
+
+Read the full guide:
+    KHMER_NAMES_GUIDE.md
+
+Test names first:
+    py test_khmer_names.py
+
+═══════════════════════════════════════════════════════════════

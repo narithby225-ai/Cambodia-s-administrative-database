@@ -55,8 +55,8 @@ python gui_super_cool.py
 ## 🔑 Test Credentials:
 
 **Super Admin:**
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 - Result: Shows success message
 
 **Province Manager:**
@@ -176,7 +176,7 @@ python test_cool_login.py
 python gui_super_cool.py
 
 # Login with
-superadmin / super123
+admin / admin123
 ```
 
 Enjoy the coolest login screen ever created! 🎨✨

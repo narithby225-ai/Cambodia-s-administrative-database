@@ -1,49 +1,143 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card" style="text-align: center;">
-    <h1 style="font-size: 3rem; margin-bottom: 1rem;">
-        <i class="fas fa-database"></i> Cambodia People Management System
+<div class="card" style="text-align: center; padding: 3rem;">
+    <div style="margin-bottom: 2rem;">
+        <div style="display: inline-block; position: relative;">
+            <!-- Cambodia Flag Badge -->
+            <div style="position: absolute; top: -20px; right: -20px; z-index: 10;">
+                <img src="{{ url_for('static', filename='images/cambodia-flag-real.jpg') }}" 
+                     alt="Cambodia Flag" 
+                     class="flag-real"
+                     style="width: 60px; height: 38px; border-radius: 6px; box-shadow: 0 4px 12px rgba(3, 46, 161, 0.4); border: 2px solid white; object-fit: cover;">
+            </div>
+            <i class="fas fa-database" style="font-size: 5rem; color: var(--premium-gold); filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.6));"></i>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border: 2px solid var(--premium-gold); border-radius: 50%; opacity: 0.2; animation: rotate 10s linear infinite;"></div>
+        </div>
+    </div>
+    
+    <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--premium-gold), #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900;">
+        Cambodia People Management System
     </h1>
-    <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
-        Comprehensive database of 10 million people across 25 provinces
+    <div class="cambodia-badge" style="display: inline-flex; margin-bottom: 2rem;">
+        <img src="{{ url_for('static', filename='images/cambodia-flag-real.jpg') }}" alt="Cambodia" class="flag-real">
+        <span>Kingdom of Cambodia</span>
+    </div>
+    <p style="font-size: 1.3rem; color: rgba(248, 250, 252, 0.8); margin-bottom: 3rem; font-weight: 500;">
+        Premium database of 10 million people across 25 provinces
     </p>
 
     {% if current_user.is_authenticated %}
-    <div class="stats-grid">
+    <div class="stats-grid" style="margin-top: 3rem;">
         <div class="stat-card">
-            <i class="fas fa-users" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+            <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; color: var(--premium-gold); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));"></i>
             <h3>10M+</h3>
             <p>People Records</p>
         </div>
         <div class="stat-card">
-            <i class="fas fa-map-marked-alt" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+            <i class="fas fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 1rem; color: var(--premium-gold); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));"></i>
             <h3>25</h3>
             <p>Provinces</p>
         </div>
         <div class="stat-card">
-            <i class="fas fa-city" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+            <i class="fas fa-city" style="font-size: 3rem; margin-bottom: 1rem; color: var(--premium-gold); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));"></i>
             <h3>14,578</h3>
             <p>Villages</p>
         </div>
     </div>
 
-    <p style="margin-bottom: 1.5rem;">
-        Welcome back, <strong>{{ current_user.username }}</strong>!
-    </p>
-    <a href="{{ url_for('search') }}" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
-        <i class="fas fa-search"></i> Start Searching
-    </a>
-    {% else %}
-    <div style="background: #f8f9ff; padding: 2rem; border-radius: 15px; margin-top: 2rem;">
-        <i class="fas fa-lock" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
-        <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
-            Please login to access the database
+    <div style="margin-top: 3rem; padding: 2rem; background: rgba(255, 215, 0, 0.1); border-radius: 15px; border: 1px solid rgba(255, 215, 0, 0.3);">
+        <p style="font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--text-light);">
+            <i class="fas fa-crown" style="color: var(--premium-gold);"></i> 
+            Welcome back, <strong style="color: var(--premium-gold);">{{ current_user.username }}</strong>!
+            {% if current_user.role == 'manager' and current_user.province %}
+            <br><span style="font-size: 1rem; opacity: 0.8;" id="managerProvince" data-province="{{ current_user.province }}">
+                <span class="province-emoji">📍</span> Managing {{ current_user.province }}
+            </span>
+            {% endif %}
         </p>
-        <a href="{{ url_for('login') }}" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
-            <i class="fas fa-sign-in-alt"></i> Login Now
+        <a href="{{ url_for('search') }}" class="btn" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
+            <i class="fas fa-search"></i> Start Searching Database
+        </a>
+    </div>
+
+    <!-- Province Showcase -->
+    <div style="margin-top: 3rem;">
+        <h3 style="color: var(--text-light); margin-bottom: 1.5rem; font-size: 1.5rem;">
+            <i class="fas fa-map-marked-alt" style="color: var(--premium-gold);"></i> 
+            Explore Cambodia's 25 Provinces
+        </h3>
+        <div id="provinceShowcase" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align: left;">
+            <!-- Provinces will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Add province icon to manager badge
+        {% if current_user.role == 'manager' and current_user.province %}
+        const managerBadge = document.getElementById('managerProvince');
+        if (managerBadge) {
+            const provinceName = managerBadge.getAttribute('data-province');
+            const data = getProvinceData(provinceName);
+            if (data) {
+                const emojiSpan = managerBadge.querySelector('.province-emoji');
+                if (emojiSpan) {
+                    emojiSpan.textContent = data.emoji;
+                }
+            }
+        }
+        {% endif %}
+
+        // Load province showcase
+        const provinceShowcase = document.getElementById('provinceShowcase');
+        const provinces = [
+            "Phnom Penh", "Siemreap", "Preah Sihanouk", "Battambang", "Kampot",
+            "Kep", "Kampong Cham", "Kratie", "Mondul Kiri", "Ratanak Kiri",
+            "Banteay Meanchey", "Pailin", "Oddar Meanchey", "Preah Vihear", "Stung Treng",
+            "Kampong Thom", "Kampong Chhnang", "Pursat", "Koh Kong", "Kandal",
+            "Kampong Speu", "Takeo", "Prey Veng", "Svay Rieng", "Tboung Khmum"
+        ];
+
+        provinces.forEach(province => {
+            const data = getProvinceData(province);
+            const card = document.createElement('div');
+            card.className = 'province-card';
+            card.style.background = data.gradient;
+            card.innerHTML = `
+                <div class="province-info">
+                    <div class="province-icon-large">${data.emoji}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem;">${province}</div>
+                        <div style="font-size: 0.85rem; opacity: 0.9;">${data.landmark}</div>
+                    </div>
+                </div>
+            `;
+            card.title = data.description;
+            provinceShowcase.appendChild(card);
+        });
+    </script>
+
+    {% else %}
+    <div style="background: rgba(99, 102, 241, 0.2); backdrop-filter: blur(10px); padding: 3rem; border-radius: 20px; margin-top: 3rem; border: 1px solid var(--glass-border);">
+        <i class="fas fa-lock" style="font-size: 4rem; color: var(--premium-gold); margin-bottom: 1.5rem; filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));"></i>
+        <p style="font-size: 1.3rem; margin-bottom: 2rem; color: var(--text-light); font-weight: 500;">
+            Please login to access the premium database
+        </p>
+        <a href="{{ url_for('login') }}" class="btn" style="font-size: 1.2rem; padding: 1.2rem 2.5rem;">
+            <i class="fas fa-sign-in-alt"></i> Login to System
         </a>
     </div>
     {% endif %}
 </div>
+
+<style>
+    @keyframes rotate {
+        from {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+</style>
 {% endblock %}

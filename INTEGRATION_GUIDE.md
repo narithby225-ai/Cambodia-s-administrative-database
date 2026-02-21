@@ -46,7 +46,7 @@ python init_db.py
 
 ### Issue: Login fails
 **Fix:** Check credentials:
-- superadmin / super123
+- admin / admin123
 - kep / manager123
 
 ## 📝 What Works Now

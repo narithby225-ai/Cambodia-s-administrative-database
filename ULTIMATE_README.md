@@ -70,8 +70,8 @@ Or double-click: **run_ultimate.bat**
 ## 🔑 Login Credentials
 
 **Super Admin:**
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 
 **Province Manager:**
 - Username: `battambang` (or any province)

@@ -1,29 +1,73 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card" style="max-width: 450px; margin: 4rem auto;">
-    <div style="text-align: center; margin-bottom: 2rem;">
-        <i class="fas fa-user-circle" style="font-size: 4rem; color: #667eea;"></i>
-        <h2 style="margin-top: 1rem;">Welcome Back</h2>
-        <p style="color: #666;">Login to access the database</p>
+<div class="card" style="max-width: 500px; margin: 4rem auto; position: relative;">
+    <!-- Cambodia Flag Corner Badge -->
+    <div style="position: absolute; top: -10px; right: -10px; z-index: 10;">
+        <img src="{{ url_for('static', filename='images/cambodia-flag-real.jpg') }}" 
+             alt="Cambodia Flag" 
+             class="flag-real"
+             style="width: 50px; height: 32px; border-radius: 6px; box-shadow: 0 4px 12px rgba(3, 46, 161, 0.5); border: 2px solid white; object-fit: cover;">
+    </div>
+    
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+        <div style="position: relative; display: inline-block;">
+            <i class="fas fa-shield-alt" style="font-size: 5rem; color: var(--premium-gold); filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));"></i>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; border: 3px solid var(--premium-gold); border-radius: 50%; opacity: 0.3; animation: pulse 2s infinite;"></div>
+        </div>
+        <h2 style="margin-top: 1.5rem; font-size: 2.2rem; background: linear-gradient(135deg, var(--premium-gold), #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Welcome Back</h2>
+        <div class="cambodia-badge" style="display: inline-flex; margin-top: 0.5rem;">
+            <img src="{{ url_for('static', filename='images/cambodia-flag-real.jpg') }}" alt="Cambodia" class="flag-real">
+            <span>Cambodia People Database</span>
+        </div>
+        <p style="color: rgba(248, 250, 252, 0.7); font-size: 1.05rem; margin-top: 0.5rem;">Login to access the premium database</p>
     </div>
 
-    <form method="POST">
+    <form method="POST" style="position: relative; z-index: 1;">
         <div class="form-group">
-            <label><i class="fas fa-user"></i> Username</label>
-            <input type="text" name="username" placeholder="Enter your username" required style="width: 100%;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;">
+                <i class="fas fa-user" style="color: var(--premium-gold);"></i> Username
+            </label>
+            <input type="text" name="username" placeholder="Enter your username" required 
+                   style="width: 100%; font-size: 1rem;">
         </div>
         <div class="form-group">
-            <label><i class="fas fa-lock"></i> Password</label>
-            <input type="password" name="password" placeholder="Enter your password" required style="width: 100%;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem;">
+                <i class="fas fa-lock" style="color: var(--premium-gold);"></i> Password
+            </label>
+            <input type="password" name="password" placeholder="Enter your password" required 
+                   style="width: 100%; font-size: 1rem;">
         </div>
-        <button type="submit" class="btn" style="width: 100%; justify-content: center; font-size: 1.1rem;">
-            <i class="fas fa-sign-in-alt"></i> Login
+        <button type="submit" class="btn" style="width: 100%; justify-content: center; font-size: 1.1rem; margin-top: 1rem; padding: 1.1rem;">
+            <i class="fas fa-sign-in-alt"></i> Login to System
         </button>
     </form>
 
-    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e0e0e0; text-align: center; color: #666;">
-        <small>Default credentials: admin / admin123</small>
+    <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); text-align: center;">
+        <div style="background: rgba(255, 215, 0, 0.1); padding: 1rem; border-radius: 10px; border: 1px solid rgba(255, 215, 0, 0.3);">
+            <p style="color: var(--premium-gold); font-weight: 600; margin-bottom: 0.5rem;">
+                <i class="fas fa-info-circle"></i> Default Credentials
+            </p>
+            <p style="color: rgba(248, 250, 252, 0.8); font-size: 0.9rem;">
+                Super Admin: <code style="background: rgba(255, 255, 255, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">admin / admin123</code>
+            </p>
+            <p style="color: rgba(248, 250, 252, 0.8); font-size: 0.9rem; margin-top: 0.3rem;">
+                Province Manager: <code style="background: rgba(255, 255, 255, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">pailin / manager123</code>
+            </p>
+        </div>
     </div>
 </div>
+
+<style>
+    @keyframes pulse {
+        0%, 100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.3;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.1);
+            opacity: 0.1;
+        }
+    }
+</style>
 {% endblock %}

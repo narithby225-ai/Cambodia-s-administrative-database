@@ -10,16 +10,16 @@ def init_database():
         db.create_all()
         
         # Create super admin user if not exists
-        if not User.query.filter_by(username='superadmin').first():
+        if not User.query.filter_by(username='admin').first():
             super_admin = User(
-                username='superadmin',
-                password=generate_password_hash('super123'),
-                role='super_admin',
+                username='admin',
+                password=generate_password_hash('admin123'),
+                role='admin',
                 province=None
             )
             db.session.add(super_admin)
             db.session.commit()
-            print("Super Admin created (username: superadmin, password: super123)")
+            print("Super Admin created (username: admin, password: super123)")
         
         # Create 25 province managers
         provinces = [

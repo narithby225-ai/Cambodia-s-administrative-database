@@ -123,8 +123,8 @@ python gui_pyqt6.py
 ## 🔑 Default Credentials
 
 **Super Admin:**
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 
 **Province Managers:**
 - Username: `battambang`, `phnom_penh`, etc.

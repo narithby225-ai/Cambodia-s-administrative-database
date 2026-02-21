@@ -17,8 +17,8 @@ Desktop GUI application for managing the people database with role-based access 
 - Full access to all data across all provinces
 - Can create and delete users
 - Can create province managers
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 
 ### 2. Province Manager (25 managers, one per province)
 - Access only to their assigned province data

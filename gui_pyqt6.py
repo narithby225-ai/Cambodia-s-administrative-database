@@ -194,7 +194,7 @@ class LoginWindow(QDialog):
         layout.addWidget(form_frame)
         
         # Info text
-        info = QLabel("Default: superadmin / super123")
+        info = QLabel("Default: admin / super123")
         info.setAlignment(Qt.AlignmentFlag.AlignCenter)
         info.setStyleSheet("color: white; font-size: 12px; background: transparent;")
         layout.addWidget(info)

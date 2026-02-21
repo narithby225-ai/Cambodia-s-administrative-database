@@ -48,7 +48,7 @@ python gui_app.py
 Or double-click: `run_gui.bat`
 
 4. **Login:**
-   - Super Admin: `superadmin` / `super123`
+   - Super Admin: `admin` / `admin123`
    - Province Manager: `battambang` / `manager123` (example)
 
 📖 See [QUICKSTART.md](QUICKSTART.md) and [GUI_README.md](GUI_README.md) for detailed guide.
@@ -74,7 +74,7 @@ python app.py
 4. **Access at:** http://localhost:5000
 
 5. **Login:**
-   - Super Admin: `superadmin` / `super123`
+   - Super Admin: `admin` / `admin123`
 
 ## 👥 User Roles
 

@@ -2,42 +2,404 @@
 
 {% block content %}
 <div class="card">
-    <h2><i class="fas fa-search"></i> Search People Database</h2>
+    <h2>
+        <img src="{{ url_for('static', filename='images/cambodia-flag-real.jpg') }}" 
+             alt="Cambodia" 
+             class="flag-real"
+             style="width: 28px; height: 18px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); margin-right: 10px; vertical-align: middle; object-fit: cover;">
+        <i class="fas fa-search"></i> Search People Database
+    </h2>
     {% if current_user.role == 'manager' and current_user.province %}
     <div
-        style="background: #FFF3E0; border-left: 4px solid #FF9800; padding: 12px; margin-bottom: 15px; border-radius: 4px;">
+        style="background: rgba(255, 152, 0, 0.2); border-left: 4px solid #FF9800; padding: 12px; margin-bottom: 15px; border-radius: 8px; backdrop-filter: blur(10px);">
         <strong>🔒 Province Restriction:</strong> You can only view people in <strong>{{ current_user.province
             }}</strong>
     </div>
     {% endif %}
-    <form method="GET" class="search-form">
+    <form method="GET" class="search-form" id="searchForm">
         <input type="number" name="id" placeholder="🆔 ID" value="{{ request.args.get('id', '') }}">
         <input type="text" name="name" placeholder="🔍 Name" value="{{ request.args.get('name', '') }}">
-        <select name="gender">
-            <option value="">All Genders</option>
-            <option value="male" {% if request.args.get('gender')=='male' %}selected{% endif %}>Male</option>
-            <option value="female" {% if request.args.get('gender')=='female' %}selected{% endif %}>Female</option>
+        <select name="gender" id="genderSelect">
+            <option value="">👥 All Genders</option>
+            <option value="male" {% if request.args.get('gender')=='male' %}selected{% endif %}>♂️ Male</option>
+            <option value="female" {% if request.args.get('gender')=='female' %}selected{% endif %}>♀️ Female</option>
         </select>
         <input type="number" name="age" placeholder="Age" value="{{ request.args.get('age', '') }}">
+        
         {% if current_user.role == 'manager' and current_user.province %}
-        <input type="text" name="province" placeholder="📍 Province" value="{{ current_user.province }}" readonly
-            style="background-color: #FFF3E0; color: #E65100; font-weight: bold; cursor: not-allowed;">
+        <select name="province" id="provinceSelect" disabled style="background-color: rgba(255, 215, 0, 0.1); color: var(--premium-gold); font-weight: bold; cursor: not-allowed;">
+            <option value="{{ current_user.province }}">{{ current_user.province }}</option>
+        </select>
         {% else %}
-        <input type="text" name="province" placeholder="📍 Province" value="{{ request.args.get('province', '') }}">
+        <select name="province" id="provinceSelect">
+            <option value="">📍 All Provinces</option>
+        </select>
         {% endif %}
-        <input type="text" name="district" placeholder="District" value="{{ request.args.get('district', '') }}">
-        <input type="text" name="commune" placeholder="Commune" value="{{ request.args.get('commune', '') }}">
-        <input type="text" name="village" placeholder="Village" value="{{ request.args.get('village', '') }}">
-        <button type="submit" class="btn">
+        
+        <select name="district" id="districtSelect">
+            <option value="">All Districts</option>
+        </select>
+        
+        <select name="commune" id="communeSelect">
+            <option value="">All Communes</option>
+        </select>
+        
+        <select name="village" id="villageSelect">
+            <option value="">All Villages</option>
+        </select>
+        
+        <button type="submit" class="btn" id="searchBtn">
             <i class="fas fa-search"></i> Search
         </button>
     </form>
+    
+    <script>
+    let locationData = {};
+    const isManager = {{ 'true' if current_user.role == 'manager' and current_user.province else 'false' }};
+    const managerProvince = "{{ current_user.province if current_user.role == 'manager' and current_user.province else '' }}";
+    
+    // Show loading state
+    function showLoading(element) {
+        const originalHTML = element.innerHTML;
+        element.innerHTML = '<span class="loading"></span> Loading...';
+        element.disabled = true;
+        return originalHTML;
+    }
+    
+    function hideLoading(element, originalHTML) {
+        element.innerHTML = originalHTML;
+        element.disabled = false;
+    }
+    
+    // Add loading state to search button
+    document.getElementById('searchForm').addEventListener('submit', function() {
+        const btn = document.getElementById('searchBtn');
+        showLoading(btn);
+    });
+    
+    // Load location data
+    fetch('/api/provinces')
+        .then(res => res.json())
+        .then(provinces => {
+            const provinceSelect = document.getElementById('provinceSelect');
+            if (!isManager) {
+                provinces.forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province;
+                    const data = getProvinceData(province);
+                    option.textContent = `${data.emoji} ${province}`;
+                    if (province === "{{ request.args.get('province', '') }}") {
+                        option.selected = true;
+                    }
+                    provinceSelect.appendChild(option);
+                });
+            }
+            
+            // Load initial districts if province is selected
+            const selectedProvince = provinceSelect.value;
+            if (selectedProvince) {
+                loadDistricts(selectedProvince);
+            }
+        })
+        .catch(err => console.error('Error loading provinces:', err));
+    
+    function loadDistricts(province) {
+        const districtSelect = document.getElementById('districtSelect');
+        const communeSelect = document.getElementById('communeSelect');
+        const villageSelect = document.getElementById('villageSelect');
+        
+        // Clear dependent dropdowns
+        districtSelect.innerHTML = '<option value="">All Districts</option>';
+        communeSelect.innerHTML = '<option value="">All Communes</option>';
+        villageSelect.innerHTML = '<option value="">All Villages</option>';
+        
+        if (!province) return;
+        
+        // Show loading
+        districtSelect.innerHTML = '<option value="">Loading...</option>';
+        districtSelect.disabled = true;
+        
+        fetch(`/api/districts/${encodeURIComponent(province)}`)
+            .then(res => res.json())
+            .then(districts => {
+                districtSelect.innerHTML = '<option value="">All Districts</option>';
+                districtSelect.disabled = false;
+                
+                districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    if (district === "{{ request.args.get('district', '') }}") {
+                        option.selected = true;
+                    }
+                    districtSelect.appendChild(option);
+                });
+                
+                // Load communes if district is selected
+                const selectedDistrict = districtSelect.value;
+                if (selectedDistrict) {
+                    loadCommunes(province, selectedDistrict);
+                }
+            })
+            .catch(err => {
+                console.error('Error loading districts:', err);
+                districtSelect.innerHTML = '<option value="">Error loading</option>';
+                districtSelect.disabled = false;
+            });
+    }
+    
+    function loadCommunes(province, district) {
+        const communeSelect = document.getElementById('communeSelect');
+        const villageSelect = document.getElementById('villageSelect');
+        
+        // Clear dependent dropdowns
+        communeSelect.innerHTML = '<option value="">All Communes</option>';
+        villageSelect.innerHTML = '<option value="">All Villages</option>';
+        
+        if (!district) return;
+        
+        // Show loading
+        communeSelect.innerHTML = '<option value="">Loading...</option>';
+        communeSelect.disabled = true;
+        
+        fetch(`/api/communes/${encodeURIComponent(province)}/${encodeURIComponent(district)}`)
+            .then(res => res.json())
+            .then(communes => {
+                communeSelect.innerHTML = '<option value="">All Communes</option>';
+                communeSelect.disabled = false;
+                
+                communes.forEach(commune => {
+                    const option = document.createElement('option');
+                    option.value = commune;
+                    option.textContent = commune;
+                    if (commune === "{{ request.args.get('commune', '') }}") {
+                        option.selected = true;
+                    }
+                    communeSelect.appendChild(option);
+                });
+                
+                // Load villages if commune is selected
+                const selectedCommune = communeSelect.value;
+                if (selectedCommune) {
+                    loadVillages(province, district, selectedCommune);
+                }
+            })
+            .catch(err => {
+                console.error('Error loading communes:', err);
+                communeSelect.innerHTML = '<option value="">Error loading</option>';
+                communeSelect.disabled = false;
+            });
+    }
+    
+    function loadVillages(province, district, commune) {
+        const villageSelect = document.getElementById('villageSelect');
+        
+        villageSelect.innerHTML = '<option value="">All Villages</option>';
+        
+        if (!commune) return;
+        
+        // Show loading
+        villageSelect.innerHTML = '<option value="">Loading...</option>';
+        villageSelect.disabled = true;
+        
+        fetch(`/api/villages/${encodeURIComponent(province)}/${encodeURIComponent(district)}/${encodeURIComponent(commune)}`)
+            .then(res => res.json())
+            .then(villages => {
+                villageSelect.innerHTML = '<option value="">All Villages</option>';
+                villageSelect.disabled = false;
+                
+                villages.forEach(village => {
+                    const option = document.createElement('option');
+                    option.value = village;
+                    option.textContent = village;
+                    if (village === "{{ request.args.get('village', '') }}") {
+                        option.selected = true;
+                    }
+                    villageSelect.appendChild(option);
+                });
+            })
+            .catch(err => {
+                console.error('Error loading villages:', err);
+                villageSelect.innerHTML = '<option value="">Error loading</option>';
+                villageSelect.disabled = false;
+            });
+    }
+    
+    // Event listeners for cascading dropdowns
+    document.getElementById('provinceSelect').addEventListener('change', function() {
+        loadDistricts(this.value);
+    });
+    
+    document.getElementById('districtSelect').addEventListener('change', function() {
+        const province = document.getElementById('provinceSelect').value;
+        loadCommunes(province, this.value);
+    });
+    
+    document.getElementById('communeSelect').addEventListener('change', function() {
+        const province = document.getElementById('provinceSelect').value;
+        const district = document.getElementById('districtSelect').value;
+        loadVillages(province, district, this.value);
+    });
+    </script>
 
-    <div class="stat-card" style="margin-top: 1rem;">
+    <div class="stat-card" id="resultsStatCard" style="margin-top: 1rem;">
+        {% if request.args.get('gender') == 'male' %}
+        <i class="fas fa-mars" style="font-size: 3rem; margin-bottom: 0.5rem; color: var(--premium-gold); filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));"></i>
+        {% elif request.args.get('gender') == 'female' %}
+        <i class="fas fa-venus" style="font-size: 3rem; margin-bottom: 0.5rem; color: var(--premium-gold); filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.5));"></i>
+        {% else %}
+        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 0.5rem; color: var(--premium-gold); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));"></i>
+        {% endif %}
         <h3>{{ "{:,}".format(total) }}</h3>
-        <p>Total Results Found</p>
+        <p>
+            {% if request.args.get('gender') == 'male' %}
+            <i class="fas fa-male"></i> Male Results Found
+            {% elif request.args.get('gender') == 'female' %}
+            <i class="fas fa-female"></i> Female Results Found
+            {% else %}
+            <i class="fas fa-chart-bar"></i> Total Results Found
+            {% endif %}
+        </p>
+    </div>
+
+    <script>
+        // Apply gender-specific gradient to stat card
+        document.addEventListener('DOMContentLoaded', function() {
+            const statCard = document.getElementById('resultsStatCard');
+            const gender = "{{ request.args.get('gender', '') }}";
+            
+            if (gender === 'male') {
+                statCard.style.background = 'linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(37, 99, 235, 0.3))';
+                statCard.style.borderColor = 'rgba(59, 130, 246, 0.5)';
+            } else if (gender === 'female') {
+                statCard.style.background = 'linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(219, 39, 119, 0.3))';
+                statCard.style.borderColor = 'rgba(236, 72, 153, 0.5)';
+            }
+        });
+    </script>
+</div>
+
+<!-- Interactive Map Section -->
+<div class="card">
+    <h2><i class="fas fa-map-marked-alt"></i> Location Map</h2>
+    <p style="color: rgba(248, 250, 252, 0.7); margin-bottom: 1rem;">
+        <i class="fas fa-info-circle"></i> Interactive map showing search locations
+    </p>
+    
+    <!-- Map Controls -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+        <button onclick="resetMapView()" class="btn" style="padding: 0.6rem 1rem; font-size: 0.9rem;">
+            <i class="fas fa-home"></i> Reset View
+        </button>
+        <button onclick="locateCurrentSearch()" class="btn btn-success" style="padding: 0.6rem 1rem; font-size: 0.9rem;">
+            <i class="fas fa-crosshairs"></i> Locate Search Area
+        </button>
+        {% if people|length > 0 %}
+        <button onclick="showAllResults()" class="btn" style="padding: 0.6rem 1rem; font-size: 0.9rem; background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+            <i class="fas fa-map-pin"></i> Show All Results ({{ people|length }})
+        </button>
+        {% endif %}
+    </div>
+    
+    <!-- Map Container -->
+    <div id="cambodiaMap" style="
+        height: 500px; 
+        border-radius: 12px; 
+        overflow: hidden; 
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 2px solid var(--glass-border);
+    "></div>
+    
+    <div style="margin-top: 1rem; padding: 1rem; background: rgba(255, 215, 0, 0.1); border-radius: 8px; border: 1px solid rgba(255, 215, 0, 0.3);">
+        <p style="margin: 0; font-size: 0.9rem; color: rgba(248, 250, 252, 0.8);">
+            <i class="fas fa-lightbulb" style="color: var(--premium-gold);"></i> 
+            <strong>Tip:</strong> Click markers for details. Use mouse wheel to zoom. Drag to pan.
+        </p>
     </div>
 </div>
+
+<script>
+    // Initialize map when page loads
+    let cambodiaMap = null;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the map
+        cambodiaMap = initMap('cambodiaMap');
+        
+        // Auto-locate if search parameters exist
+        const province = "{{ request.args.get('province', '') }}";
+        const district = "{{ request.args.get('district', '') }}";
+        const commune = "{{ request.args.get('commune', '') }}";
+        const village = "{{ request.args.get('village', '') }}";
+        
+        if (province || district || commune || village) {
+            setTimeout(() => {
+                locateCurrentSearch();
+            }, 500);
+        }
+    });
+    
+    // Reset map to Cambodia view
+    function resetMapView() {
+        if (cambodiaMap) {
+            cambodiaMap.flyTo([12.5657, 104.9910], 7, {
+                duration: 1.5
+            });
+            clearMarkers();
+        }
+    }
+    
+    // Locate current search area
+    async function locateCurrentSearch() {
+        const province = "{{ request.args.get('province', '') }}";
+        const district = "{{ request.args.get('district', '') }}";
+        const commune = "{{ request.args.get('commune', '') }}";
+        const village = "{{ request.args.get('village', '') }}";
+        
+        if (!province && !district && !commune && !village) {
+            alert('Please select a location to view on the map');
+            return;
+        }
+        
+        await locateOnMap(
+            province || null,
+            district || null,
+            commune || null,
+            village || null
+        );
+    }
+    
+    // Show all search results on map
+    async function showAllResults() {
+        const results = [
+            {% for person in people[:10] %}
+            {
+                firstName: "{{ person.first_name or person.name.split()[0] if person.name else 'N/A' }}",
+                lastName: "{{ person.last_name or (person.name.split()[1] if person.name and ' ' in person.name else '') }}",
+                province: "{{ person.province }}",
+                district: "{{ person.district }}",
+                commune: "{{ person.commune }}",
+                village: "{{ person.village }}"
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+        
+        if (results.length === 0) {
+            alert('No results to display on map');
+            return;
+        }
+        
+        // Show loading message
+        const loadingMsg = document.createElement('div');
+        loadingMsg.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 20px 40px; border-radius: 12px; z-index: 10000;';
+        loadingMsg.innerHTML = '<div class="loading"></div> Loading locations...';
+        document.body.appendChild(loadingMsg);
+        
+        await addMultipleLocations(results);
+        
+        document.body.removeChild(loadingMsg);
+    }
+</script>
 
 <div class="card">
     <div class="table-wrapper">
@@ -45,7 +407,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                     <th>Gender</th>
                     <th>Age</th>
                     <th>Province</th>
@@ -57,8 +420,9 @@
             <tbody>
                 {% for person in people %}
                 <tr>
-                    <td><strong>#{{ person.id }}</strong></td>
-                    <td>{{ person.name }}</td>
+                    <td><strong style="color: var(--premium-gold);">#{{ person.id }}</strong></td>
+                    <td style="font-weight: 600; color: rgba(248, 250, 252, 0.95);">{{ person.first_name or person.name.split()[0] if person.name else 'N/A' }}</td>
+                    <td style="font-weight: 600; color: rgba(248, 250, 252, 0.85);">{{ person.last_name or (person.name.split()[1] if person.name and ' ' in person.name else '') }}</td>
                     <td>
                         <span class="badge badge-{{ person.gender }}">
                             {% if person.gender == 'male' %}
@@ -69,7 +433,12 @@
                         </span>
                     </td>
                     <td>{{ person.age }}</td>
-                    <td>{{ person.province }}</td>
+                    <td>
+                        <span class="province-badge" data-province="{{ person.province }}" style="background: rgba(99, 102, 241, 0.2);">
+                            <span class="province-emoji">📍</span>
+                            <span>{{ person.province }}</span>
+                        </span>
+                    </td>
                     <td>{{ person.district }}</td>
                     <td>{{ person.commune }}</td>
                     <td>{{ person.village }}</td>
@@ -78,6 +447,27 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        // Apply province icons and colors to badges
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinceBadges = document.querySelectorAll('.province-badge');
+            provinceBadges.forEach(badge => {
+                const provinceName = badge.getAttribute('data-province');
+                const data = getProvinceData(provinceName);
+                
+                if (data) {
+                    badge.style.background = data.gradient;
+                    badge.style.borderColor = data.color;
+                    const emojiSpan = badge.querySelector('.province-emoji');
+                    if (emojiSpan) {
+                        emojiSpan.textContent = data.emoji;
+                    }
+                    badge.title = `${data.landmark} - ${data.description}`;
+                }
+            });
+        });
+    </script>
 
     <div class="pagination">
         {% if pagination.has_prev %}

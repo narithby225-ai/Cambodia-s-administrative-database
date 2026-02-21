@@ -43,8 +43,8 @@ python gui_clean_cool.py
 ## 🔑 Test Credentials
 
 **Super Admin:**
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 
 **Province Manager:**
 - Username: `kep`
@@ -118,7 +118,7 @@ python -c "import gui_clean_cool; print('✅ Ready!')"
 python gui_clean_cool.py
 
 # Login
-superadmin / super123
+admin / admin123
 ```
 
 ## 📝 Files

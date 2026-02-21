@@ -50,8 +50,8 @@ python gui_pyqt6.py
 ## 🔑 Login Credentials
 
 ### Super Admin (Full Access)
-- **Username**: `superadmin`
-- **Password**: `super123`
+- **Username**: `admin`
+- **Password**: `admin123`
 - **Access**: ALL 25 provinces (10,000,000 people)
 
 ### Province Managers (25 total)
@@ -106,7 +106,7 @@ python gui_pyqt6.py
 
 ### Step 4: Login
 - Use `kep` / `manager123` to test manager role
-- Use `superadmin` / `super123` for full access
+- Use `admin` / `admin123` for full access
 
 ## 📋 Files Created
 
@@ -218,7 +218,7 @@ python fix_manager_provinces.py
 ❌ Cannot create/delete users
 ❌ Cannot change their province
 
-### Super Admin (`superadmin`)
+### Super Admin (`admin`)
 ✅ View ALL 10,000,000 people
 ✅ Search across all 25 provinces
 ✅ Create and delete users

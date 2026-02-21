@@ -23,8 +23,8 @@ Or double-click: `run_gui.bat`
 ### Step 3: Login
 
 **Super Admin:**
-- Username: `superadmin`
-- Password: `super123`
+- Username: `admin`
+- Password: `admin123`
 
 **Province Manager (example):**
 - Username: `battambang`
