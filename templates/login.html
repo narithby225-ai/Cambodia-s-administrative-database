@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="max-width: 450px; margin: 4rem auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <i class="fas fa-user-circle" style="font-size: 4rem; color: #667eea;"></i>
+        <h2 style="margin-top: 1rem;">Welcome Back</h2>
+        <p style="color: #666;">Login to access the database</p>
+    </div>
+
+    <form method="POST">
+        <div class="form-group">
+            <label><i class="fas fa-user"></i> Username</label>
+            <input type="text" name="username" placeholder="Enter your username" required style="width: 100%;">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" name="password" placeholder="Enter your password" required style="width: 100%;">
+        </div>
+        <button type="submit" class="btn" style="width: 100%; justify-content: center; font-size: 1.1rem;">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+    </form>
+
+    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e0e0e0; text-align: center; color: #666;">
+        <small>Default credentials: admin / admin123</small>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║         PEOPLE DATABASE MANAGEMENT - QUICK REFERENCE                 ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+🚀 QUICK START
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. pip install PyQt6
+2. python fix_manager_provinces.py
+3. python gui_pyqt6.py
+4. Login: kep / manager123
+
+🔑 LOGIN CREDENTIALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Super Admin:
+  Username: superadmin
+  Password: super123
+  Access:   ALL 10,000,000 people
+
+Kep Manager:
+  Username: kep
+  Password: manager123
+  Access:   ONLY 400,589 people in Kep
+
+Other Managers:
+  battambang, phnom_penh, kampot, etc.
+  Password: manager123
+  Access:   Their province only
+
+📱 AVAILABLE VERSIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ PyQt6 GUI       → python gui_pyqt6.py      (RECOMMENDED)
+⭐ Ultimate GUI    → python gui_ultimate.py   (Most Beautiful)
+🖥️ Tkinter GUI     → python gui_app.py        (Simple)
+🌐 Web App         → python app.py            (Browser)
+
+🔒 PROVINCE RESTRICTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Manager "kep" can ONLY see:
+  ✅ 400,589 people in Kep Province
+  ❌ 9,600,000+ people in other 24 provinces
+
+Visual Indicators:
+  🟠 Orange province field (disabled)
+  🔒 Lock icon showing restriction
+  ⚠️ Warning banner in web version
+
+🧪 TEST RESTRICTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+python test_manager_role.py
+
+Expected Output:
+  ✅ Manager sees: 400,589 people (4.0%)
+  🔒 Manager BLOCKED: 9,600,924 people (96.0%)
+  ✅ RESTRICTION WORKING CORRECTLY!
+
+🔧 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Problem: PyQt6 not found
+Fix:     pip install PyQt6
+
+Problem: Manager sees all provinces
+Fix:     python fix_manager_provinces.py
+
+Problem: Database locked
+Fix:     Close other instances
+
+Problem: Province field not disabled
+Fix:     Check user role is 'manager'
+
+📊 DATABASE INFO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Total People:    10,000,000
+Total Users:     26 (1 admin + 25 managers)
+Provinces:       25
+Per Province:    ~400,000 people
+Database:        instance/people.db
+
+🎯 MANAGER CAPABILITIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Kep Manager CAN:
+  ✅ View people in Kep
+  ✅ Search in Kep
+  ✅ See own history
+
+Kep Manager CANNOT:
+  ❌ See other provinces
+  ❌ Create/delete users
+  ❌ Change province
+
+Super Admin CAN:
+  ✅ Everything
+  ✅ All provinces
+  ✅ User management
+
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL_SUMMARY.md         → Complete overview
+MANAGER_ROLE_GUIDE.md    → Role explanation
+PYQT6_README.md          → PyQt6 GUI guide
+QUICKSTART.md            → Quick start
+test_manager_role.py     → Test script
+
+🎨 FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Search by ID, Name, Gender, Age
+✅ Filter by Province/District/Commune/Village
+✅ Pagination (100 per page)
+✅ User management
+✅ Action history
+✅ Province restrictions
+✅ Beautiful gradients
+✅ Smooth animations
+
+💡 TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Use gui_pyqt6.py for best experience
+2. Login as 'kep' to test manager role
+3. Province field will be orange/disabled
+4. Only Kep people will appear in results
+5. Stats show only Kep count
+
+🌟 SUCCESS INDICATORS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Province field is orange
+✅ Shows "Kep" and disabled
+✅ Search returns ~400K results
+✅ Cannot see other provinces
+✅ Stats show 4% of total
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  READY TO USE! Run: python gui_pyqt6.py                             ║
+╚══════════════════════════════════════════════════════════════════════╝

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h1 style="font-size: 3rem; margin-bottom: 1rem;">
+        <i class="fas fa-database"></i> Cambodia People Management System
+    </h1>
+    <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
+        Comprehensive database of 10 million people across 25 provinces
+    </p>
+
+    {% if current_user.is_authenticated %}
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-users" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+            <h3>10M+</h3>
+            <p>People Records</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-map-marked-alt" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+            <h3>25</h3>
+            <p>Provinces</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-city" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+            <h3>14,578</h3>
+            <p>Villages</p>
+        </div>
+    </div>
+
+    <p style="margin-bottom: 1.5rem;">
+        Welcome back, <strong>{{ current_user.username }}</strong>!
+    </p>
+    <a href="{{ url_for('search') }}" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+        <i class="fas fa-search"></i> Start Searching
+    </a>
+    {% else %}
+    <div style="background: #f8f9ff; padding: 2rem; border-radius: 15px; margin-top: 2rem;">
+        <i class="fas fa-lock" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+        <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+            Please login to access the database
+        </p>
+        <a href="{{ url_for('login') }}" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+            <i class="fas fa-sign-in-alt"></i> Login Now
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2><i class="fas fa-search"></i> Search People Database</h2>
+    {% if current_user.role == 'manager' and current_user.province %}
+    <div
+        style="background: #FFF3E0; border-left: 4px solid #FF9800; padding: 12px; margin-bottom: 15px; border-radius: 4px;">
+        <strong>🔒 Province Restriction:</strong> You can only view people in <strong>{{ current_user.province
+            }}</strong>
+    </div>
+    {% endif %}
+    <form method="GET" class="search-form">
+        <input type="number" name="id" placeholder="🆔 ID" value="{{ request.args.get('id', '') }}">
+        <input type="text" name="name" placeholder="🔍 Name" value="{{ request.args.get('name', '') }}">
+        <select name="gender">
+            <option value="">All Genders</option>
+            <option value="male" {% if request.args.get('gender')=='male' %}selected{% endif %}>Male</option>
+            <option value="female" {% if request.args.get('gender')=='female' %}selected{% endif %}>Female</option>
+        </select>
+        <input type="number" name="age" placeholder="Age" value="{{ request.args.get('age', '') }}">
+        {% if current_user.role == 'manager' and current_user.province %}
+        <input type="text" name="province" placeholder="📍 Province" value="{{ current_user.province }}" readonly
+            style="background-color: #FFF3E0; color: #E65100; font-weight: bold; cursor: not-allowed;">
+        {% else %}
+        <input type="text" name="province" placeholder="📍 Province" value="{{ request.args.get('province', '') }}">
+        {% endif %}
+        <input type="text" name="district" placeholder="District" value="{{ request.args.get('district', '') }}">
+        <input type="text" name="commune" placeholder="Commune" value="{{ request.args.get('commune', '') }}">
+        <input type="text" name="village" placeholder="Village" value="{{ request.args.get('village', '') }}">
+        <button type="submit" class="btn">
+            <i class="fas fa-search"></i> Search
+        </button>
+    </form>
+
+    <div class="stat-card" style="margin-top: 1rem;">
+        <h3>{{ "{:,}".format(total) }}</h3>
+        <p>Total Results Found</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Province</th>
+                    <th>District</th>
+                    <th>Commune</th>
+                    <th>Village</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in people %}
+                <tr>
+                    <td><strong>#{{ person.id }}</strong></td>
+                    <td>{{ person.name }}</td>
+                    <td>
+                        <span class="badge badge-{{ person.gender }}">
+                            {% if person.gender == 'male' %}
+                            <i class="fas fa-mars"></i> Male
+                            {% else %}
+                            <i class="fas fa-venus"></i> Female
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>{{ person.age }}</td>
+                    <td>{{ person.province }}</td>
+                    <td>{{ person.district }}</td>
+                    <td>{{ person.commune }}</td>
+                    <td>{{ person.village }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        {% if pagination.has_prev %}
+        <a
+            href="{{ url_for('search', page=pagination.prev_num, id=request.args.get('id', ''), name=request.args.get('name', ''), gender=request.args.get('gender', ''), age=request.args.get('age', ''), province=request.args.get('province', ''), district=request.args.get('district', ''), commune=request.args.get('commune', ''), village=request.args.get('village', '')) }}">
+            <i class="fas fa-chevron-left"></i> Previous
+        </a>
+        {% endif %}
+
+        <span class="current">Page {{ pagination.page }} of {{ pagination.pages }}</span>
+
+        {% if pagination.has_next %}
+        <a
+            href="{{ url_for('search', page=pagination.next_num, id=request.args.get('id', ''), name=request.args.get('name', ''), gender=request.args.get('gender', ''), age=request.args.get('age', ''), province=request.args.get('province', ''), district=request.args.get('district', ''), commune=request.args.get('commune', ''), village=request.args.get('village', '')) }}">
+            Next <i class="fas fa-chevron-right"></i>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
